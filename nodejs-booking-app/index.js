@@ -19,6 +19,7 @@ const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
 
+
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 // The file token.json stores the user's access and refresh tokens, and is
@@ -27,11 +28,14 @@ const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 const TOKEN_PATH = 'token.json';
 
 // Load client secrets from a local file.
-fs.readFile('credentials.json', (err, content) => {
-    if (err) return console.log('Error loading client secret file:', err);
-// Authorize a client with credentials, then call the Google Calendar API.
-authorize(JSON.parse(content), listEvents);
-});
+function initAuthorize(callback) {
+    fs.readFile('credentials.json', (err, content) => {
+        if (err) return console.log('Error loading client secret file:', err);
+        // Authorize a client with credentials, then call the Google Calendar API.
+        authorize(JSON.parse(content), callback);
+    });
+}
+
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -83,34 +87,72 @@ function getAccessToken(oAuth2Client, callback) {
 });
 }
 
-/**
- * Lists the next 10 events on the user's primary calendar.
- * @param {google.auth.OAuth2} auth An authorized OAuth2 client.
- */
-function listEvents(auth) {
+function getEndDate(year, month) {
+    return new Date(year, month + 1, 1);
+}
+
+function addMinutes(date, minutes) {
+    return date.setMinutes(date.getMinutes() + minutes);
+}
+
+function makeAppointmentEvent(year, month, day, hour, minute) {
+    const startTime = new Date().toISOString();
+    const endTime = addMinutes(new Date(), 40);
+    const event = {
+        'start': {
+            'dateTime': `${startTime}`,
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': `${endTime}`,
+            'timeZone': 'UTC',
+        }
+    };
+    return event;
+}
+
+function getBookableDays(auth, year, month) {
     const calendar = google.calendar({version: 'v3', auth});
     calendar.events.list({
         calendarId: 'primary',
         timeMin: (new Date()).toISOString(),
+        timeMax: (getEndDate(year, month)).toISOString(),
         maxResults: 10,
         singleEvents: true,
         orderBy: 'startTime',
     }, (err, res) => {
         if (err) return console.log('The API returned an error: ' + err);
-    const events = res.data.items;
-    if (events.length) {
-        console.log('Upcoming 10 events:');
-        events.map((event, i) => {
-            const start = event.start.dateTime || event.start.date;
-        console.log(`${start} - ${event.summary}`);
+        const events = res.data.items;
+        if (events.length) {
+            console.log('Upcoming 10 events:');
+            events.map((event, i) => {
+                const start = event.start.dateTime || event.start.date;
+                console.log(`${start} - ${event.summary}`);
+            });
+        } else {
+            console.log('No upcoming events found.');
+        }
     });
-    } else {
-        console.log('No upcoming events found.');
-    }
-});
+}
+
+function bookAppointment(auth, year, month, day, hour, minute) {
+    const event = makeAppointmentEvent(year, month, day, hour, minute);
+    calendar.events.insert({
+        auth: auth,
+        calendarId: 'primary',
+        resource: event,
+    }, function(err, event) {
+        if (err) {
+            console.log('There was an error contacting the Calendar service: ' + err);
+            return;
+        }
+        console.log('Event created: %s', event.htmlLink);
+    });
 }
 
 module.exports = {
     SCOPES,
-    listEvents,
+    initAuthorize,
+    getBookableDays,
+    bookAppointment
 };
