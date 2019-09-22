@@ -1,0 +1,59 @@
+{
+  "timeslots": [
+    {
+      "session_num": 1,
+      "startTime": "T09:00:00Z",
+      "endTime": "T09:40:00Z"
+    },
+    {
+      "session_num": 2,
+      "startTime": "T09:45:00Z",
+      "endTime": "T010:25:00Z"
+    },
+    {
+      "session_num": 3,
+      "startTime": "T10:30:00Z",
+      "endTime": "T11:10:00Z"
+    },
+    {
+      "session_num": 4,
+      "startTime": "T11:15:00Z",
+      "endTime": "T11:55:00Z"
+    },
+    {
+      "session_num": 5,
+      "startTime": "T12:00:00Z",
+      "endTime": "T12:40:00Z"
+    },
+    {
+      "session_num": 6,
+      "startTime": "T012:45:00Z",
+      "endTime": "T13:25:00Z"
+    },
+    {
+      "session_num": 7,
+      "startTime": "T13:30:00Z",
+      "endTime": "T14:10:00Z"
+    },
+    {
+      "session_num": 8,
+      "startTime": "T014:15:00Z",
+      "endTime": "T014:55:00Z"
+    },
+    {
+      "session_num": 9,
+      "startTime": "T15:00:00Z",
+      "endTime": "T15:40:00Z"
+    },
+    {
+      "session_num": 10,
+      "startTime": "T15:45:00Z",
+      "endTime": "T16:25:00Z"
+    },
+    {
+      "session_num": 11,
+      "startTime": "T16:30:00Z",
+      "endTime": "T17:10:00Z"
+    }
+  ]
+}

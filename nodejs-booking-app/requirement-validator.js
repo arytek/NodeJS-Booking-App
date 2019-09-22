@@ -9,6 +9,6 @@ function isInvalidTimeslot(timeslots) {
 }
 
 module.exports = {
-    SCOPES,
-
+    isInPast,
+    isInvalidTimeslot
 };

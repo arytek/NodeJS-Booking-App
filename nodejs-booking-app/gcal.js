@@ -21,7 +21,7 @@ const {google} = require('googleapis');
 
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
+const SCOPES = ['https://www.googleapis.com/auth/calendar'];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -35,7 +35,6 @@ function initAuthorize(callback) {
         authorize(JSON.parse(content), callback);
     });
 }
-
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -53,7 +52,7 @@ function authorize(credentials, callback) {
         if (err) return getAccessToken(oAuth2Client, callback);
     oAuth2Client.setCredentials(JSON.parse(token));
     callback(oAuth2Client);
-});
+    });
 }
 
 /**
@@ -95,10 +94,40 @@ function addMinutes(date, minutes) {
     return date.setMinutes(date.getMinutes() + minutes);
 }
 
+function getBookableDays(auth, year, month) {
+    return new Promise(function(resolve, reject) {
+        const calendar = google.calendar({version: 'v3', auth});
+        calendar.events.list({
+            calendarId: 'primary',
+            timeMin: (new Date()).toISOString(),
+            timeMax: (getEndDate(year, month)).toISOString(),
+            maxResults: 10,
+            singleEvents: true,
+            orderBy: 'startTime',
+        }, (err, res) => {
+            if (err) return resolve({data: 'The API returned an error: ' + err});
+            const events = res.data.items;
+            if (events.length) {
+                console.log('Upcoming 10 events:');
+                events.map((event, i) => {
+                    const start = event.start.dateTime || event.start.date;
+                    console.log(`${start} - ${event.summary}`);
+                });
+            } else {
+                console.log('No upcoming events found.');
+                return resolve({data: 'no upcoming events found.'});
+            }
+        });
+    });
+}
+
 function makeAppointmentEvent(year, month, day, hour, minute) {
     const startTime = new Date().toISOString();
     const endTime = addMinutes(new Date(), 40);
     const event = {
+        'recurrence': [
+            'RRULE:FREQ=MINUTELY;INTERVAL=40;BYHOUR=9,10,11,12,13,14,15,16,17,18'
+        ],
         'start': {
             'dateTime': `${startTime}`,
             'timeZone': 'UTC',
@@ -111,31 +140,8 @@ function makeAppointmentEvent(year, month, day, hour, minute) {
     return event;
 }
 
-function getBookableDays(auth, year, month) {
-    const calendar = google.calendar({version: 'v3', auth});
-    calendar.events.list({
-        calendarId: 'primary',
-        timeMin: (new Date()).toISOString(),
-        timeMax: (getEndDate(year, month)).toISOString(),
-        maxResults: 10,
-        singleEvents: true,
-        orderBy: 'startTime',
-    }, (err, res) => {
-        if (err) return console.log('The API returned an error: ' + err);
-        const events = res.data.items;
-        if (events.length) {
-            console.log('Upcoming 10 events:');
-            events.map((event, i) => {
-                const start = event.start.dateTime || event.start.date;
-                console.log(`${start} - ${event.summary}`);
-            });
-        } else {
-            console.log('No upcoming events found.');
-        }
-    });
-}
-
 function bookAppointment(auth, year, month, day, hour, minute) {
+    const calendar = google.calendar({version: 'v3', auth});
     const event = makeAppointmentEvent(year, month, day, hour, minute);
     calendar.events.insert({
         auth: auth,
