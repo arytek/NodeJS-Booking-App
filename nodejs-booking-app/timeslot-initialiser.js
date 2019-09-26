@@ -5,16 +5,30 @@ const TIMESLOTS_PATH = 'timeslots.json';
 
 
 function initTimeslots(auth) {
-    const calendar = google.calendar({version: 'v3', auth});
-    const timeslots = (JSON.parse(fs.readFileSync(TIMESLOTS_PATH))).timeslots;
-    for (let value of timeslots) {
-        const event = makeInitialTimeslots(value.startTime, value.endTime);
-        calendar.events.insert({
-            auth: auth,
-            calendarId: 'primary',
-            resource: event,
-        }, initTimeslotsCallback(err, event));
-    }
+    return new Promise(function (resolve, reject) {
+        const calendar = google.calendar({version: 'v3', auth});
+        const timeslots = (JSON.parse(fs.readFileSync(TIMESLOTS_PATH))).timeslots;
+        let promises = [];
+        for (let value of timeslots) {
+            const event = makeInitialTimeslots(value.startTime, value.endTime);
+            calendar.events.insert({
+                auth: auth,
+                calendarId: 'primary',
+                resource: event,
+            }).then(function(res, err) {
+                promises.push(Promise.resolve());
+                logAddedEvent(res);
+                if (promises.length === 11) { // 11 is num of total timeslots.
+                    Promise.all(promises)
+                        .then(resolve({success: true}))
+                        .catch(reject({success: false}));
+                }
+
+            }).catch(function(res, err) {
+                promises.push(Promise.reject());
+            });
+        }
+    });
 }
 
 function makeInitialTimeslots(startTime, endTime) {
@@ -35,12 +49,11 @@ function makeInitialTimeslots(startTime, endTime) {
     return event;
 }
 
-function initTimeslotsCallback(err, event) {
-        if (err) {
-            console.log('There was an error contacting the Calendar service: ' + err);
-            return;
-        }
-        console.log('Event created: %s', event.htmlLink);
+function logAddedEvent(res) {
+    const event = res.data;
+    console.log('Event created: %s', event.summary,
+        ' Start:', event.start.dateTime,
+        ' End:', event.end.dateTime);
 }
 
 

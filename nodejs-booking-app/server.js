@@ -12,8 +12,13 @@ function setAuth(auth) {
 }
 
 function handleInitTimeslots(req, res) {
-    timeslotInitialiser.initTimeslots(this.auth);
-    res.send('Timeslots created and initialised!');
+    timeslotInitialiser.initTimeslots(this.auth)
+    .then(function(data) {
+        res.send(data);
+    })
+    .catch(function(data) {
+        res.send(data);
+    });
 }
 
 function handleGetRoot(req, res) {
@@ -28,7 +33,7 @@ function handleGetDays(req, res) {
         res.send(data);
     })
     .catch(function(data) {
-
+        res.send(data);
     });
     const data = {
         "success": true,
@@ -40,7 +45,16 @@ function handleGetDays(req, res) {
 }
 
 function handleGetTimeslots(req, res) {
-
+    const year = req.query.year;
+    const month = req.query.month;
+    const day = req.query.day;
+    gcal.getAvailTimeslots(this.auth, year, month, day)
+        .then(function(data) {
+            res.send(data);
+        })
+        .catch(function(data) {
+            res.send(data);
+        });
 }
 
 function handleBookAppointment(req, res) {
@@ -49,7 +63,13 @@ function handleBookAppointment(req, res) {
     const day = req.query.day;
     const hour = req.query.hour;
     const minute = req.query.minute;
-    gcal.bookAppointment(auth, year, month, day, hour, minute);
+    gcal.bookAppointment(this.auth, year, month, day, hour, minute)
+        .then(function(data) {
+            res.send(data);
+        })
+        .catch(function(data) {
+            res.send(data);
+        });
 }
 
 function processBookAppointment() {

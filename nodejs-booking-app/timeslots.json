@@ -8,7 +8,7 @@
     {
       "session_num": 2,
       "startTime": "T09:45:00Z",
-      "endTime": "T010:25:00Z"
+      "endTime": "T10:25:00Z"
     },
     {
       "session_num": 3,
@@ -27,7 +27,7 @@
     },
     {
       "session_num": 6,
-      "startTime": "T012:45:00Z",
+      "startTime": "T12:45:00Z",
       "endTime": "T13:25:00Z"
     },
     {
@@ -37,8 +37,8 @@
     },
     {
       "session_num": 8,
-      "startTime": "T014:15:00Z",
-      "endTime": "T014:55:00Z"
+      "startTime": "T14:15:00Z",
+      "endTime": "T14:55:00Z"
     },
     {
       "session_num": 9,
