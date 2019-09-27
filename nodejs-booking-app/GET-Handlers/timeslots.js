@@ -14,7 +14,8 @@ const appUtil = require('../AppUtil.js');
  */
 function getAvailTimeslots(auth, year, month, day, includeId) {
     return new Promise(function(resolve, reject) {
-        reqValidator.checkMissingInputs(year, month, day,0,0);
+        const isInvalid = reqValidator.checkMissingInputs(year, month, day,'0','0');
+        if (isInvalid) return reject(isInvalid);
         const startDate = new Date(Date.UTC(year, month-1, day));
         const endDate = appUtil.getNextDay(startDate);
         const calendar = google.calendar({version: 'v3', auth});
@@ -25,6 +26,7 @@ function getAvailTimeslots(auth, year, month, day, includeId) {
             maxResults: 11,
             singleEvents: true,
             orderBy: 'startTime',
+            q: 'timeslot'
         }, (err, res) => {
             if (err) return reject({response: 'The API returned an error: ' + err});
             const events = res.data.items;

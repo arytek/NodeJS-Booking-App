@@ -61,7 +61,9 @@ function makeDaysArr(endDate, bookedDays) {
  */
 function getBookableDays(auth, year, month) {
     return new Promise(function(resolve, reject) {
-        reqValidator.checkMissingInputs(year, month, 0,0,0);
+        const isInvalid = reqValidator.checkMissingInputs(year, month, '0','0','0');
+        if (isInvalid) return reject(isInvalid);
+
         const startDate = new Date(Date.UTC(year, month-1, appUtil.getCurrDateUTC()));
         const endDate = new Date((Date.UTC(year, month)));
         const calendar = google.calendar({version: 'v3', auth});

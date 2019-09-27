@@ -43,7 +43,7 @@ function getDateFromISO(dateISOString) {
  * @returns {Date}
  */
 function getNextDay(date) {
-    let tomorrow = new Date();
+    let tomorrow = new Date(date);
     tomorrow.setDate(date.getUTCDate() + 1); // Returns epoch value.
     return new Date(tomorrow); // Convert from epoch to Date.
 }
