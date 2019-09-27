@@ -3,6 +3,8 @@ An appointment booking server application made using Node JS. This application m
 
 The full application requirements are given below.
 
+For a video demonstration of the web app, see this video: https://youtu.be/Wamlp6TsO-E
+
 <h2>Requirements:</h2>
 <ul> 
   <li>All appointments are 40 minutes long and have fixed times, starting from 9–9:40 am. :heavy_check_mark:</li>
