@@ -42,9 +42,18 @@ Installation and Usage
 </ol>
 
 <h2>REST Routes:</h2>
-<ul>
-  <li>`GET  /initTimeslots`</li>
-  <li>`GET  /days?year=yyyy&month=mm`</li>
-  <li>`GET  /timeslots?year=yyyy&month=mm&day=dd`</li>
-  <li>`POST /book?year=yyyy&month=MM&day=dd&hour=hh&minute=mm`</li>
-</ul>
+
+    GET  /initTimeslots 
+    
+    GET  /days?year=yyyy&month=mm
+    
+    GET  /timeslots?year=yyyy&month=mm&day=dd
+    
+    POST /book?year=yyyy&month=MM&day=dd&hour=hh&minute=mm
+
+## License
+
+NodeJS-Booking-App is copyright (c) 2019, Aryan Nateghnia <38933061+aryannateq@users.noreply.github.com>.
+
+NodeJS-Booking-App is free software, licensed under the GPL, Version 3.0. See the
+`LICENSE` file for more details.
