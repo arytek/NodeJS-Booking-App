@@ -1,14 +1,14 @@
 {
   "name": "nodejs-booking-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "An appointment booking web app written using JavaScript and powered by Node JS.",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "express": "^4.17.1",
     "googleapis": "^39.2.0"
