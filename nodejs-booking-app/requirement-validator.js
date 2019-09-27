@@ -44,6 +44,7 @@ function isInBookableTimeframe(year, month, day, hour, minute) {
     if (reqHour < 9 && reqHour > 17) return false;
     const reqDay = reqDate.getUTCDay();
     if (reqDay === 6 || reqDay === 0) return false; // 6 is Saturday, 0 is Sunday.
+    return true;
 }
 
 /**

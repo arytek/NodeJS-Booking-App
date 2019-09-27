@@ -26,7 +26,7 @@ function initTimeslots(auth) {
                     Promise.all(promises)
                         .then(resolve({success: true}))
                         .catch(reject({success: false}));
-                }
+                }/**/
 
             }).catch(function(res, err) {
                 promises.push(Promise.reject());
