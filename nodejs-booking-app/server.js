@@ -1,6 +1,5 @@
 const express = require('express');
 const gcal = require('./gcal.js');
-const requirementValidator = require('./requirement-validator.js');
 const timeslotInitialiser = require('./timeslot-initialiser.js');
 
 const days = require('./GET-Handlers/days.js');
@@ -10,12 +9,18 @@ const book = require('./POST-Handlers/book.js');
 const app = express();
 const auth = {};
 
+// Get the OAuth2 client for making Google Calendar API requests.
 gcal.initAuthorize(setAuth);
 
 function setAuth(auth) {
     this.auth = auth;
 }
 
+/**
+ * Handles 'initTimeslots' GET requests.
+ * @param {object} req  The requests object provided by Express. See Express doc.
+ * @param {object} res  The results object provided by Express. See Express doc.
+ */
 function handleInitTimeslots(req, res) {
     timeslotInitialiser.initTimeslots(this.auth)
     .then(function(data) {
@@ -26,6 +31,11 @@ function handleInitTimeslots(req, res) {
     });
 }
 
+/**
+ * Handles 'days' GET requests.
+ * @param {object} req  The requests object provided by Express. See Express doc.
+ * @param {object} res  The results object provided by Express. See Express doc.
+ */
 function handleGetDays(req, res) {
     const year = req.query.year;
     const month = req.query.month;
@@ -38,6 +48,11 @@ function handleGetDays(req, res) {
     });
 }
 
+/**
+ * Handles 'timeslots' GET requests.
+ * @param {object} req  The requests object provided by Express. See Express doc.
+ * @param {object} res  The results object provided by Express. See Express doc.
+ */
 function handleGetTimeslots(req, res) {
     const year = req.query.year;
     const month = req.query.month;
@@ -51,6 +66,11 @@ function handleGetTimeslots(req, res) {
         });
 }
 
+/**
+ * Handles 'book' POST requests.
+ * @param {object} req  The requests object provided by Express. See Express doc.
+ * @param {object} res  The results object provided by Express. See Express doc.
+ */
 function handleBookAppointment(req, res) {
     const year = req.query.year;
     const month = req.query.month;
@@ -66,10 +86,11 @@ function handleBookAppointment(req, res) {
         });
 }
 
+// Routes.
 app.get('/initTimeslots', handleInitTimeslots);
 app.get('/days', handleGetDays);
 app.get('/timeslots', handleGetTimeslots);
 app.post('/book', handleBookAppointment);
 
-
+// Listen on port 8080 for incoming requests to the server.
 const server = app.listen(8080, function() {});

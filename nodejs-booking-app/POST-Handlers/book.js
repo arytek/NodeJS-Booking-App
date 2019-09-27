@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const requirementValidator = require('../requirement-validator.js');
+const reqValidator = require('../requirement-validator.js');
 const timeslots = require('../GET-Handlers/timeslots.js');
 
 /**
@@ -32,6 +32,9 @@ function findMatchingTimeslot(timeslots, year, month, day, hour, minute) {
  */
 function bookAppointment(auth, year, month, day, hour, minute) {
     return new Promise(function(resolve, reject) {
+        const isInvalid = reqValidator.validateBooking(year, month, day, hour, minute);
+        if (isInvalid) return reject(isInvalid);
+
         timeslots.getAvailTimeslots(auth, year, month, day, true)
             .then(function(data) {
                 const timeslots = data.timeslots;
@@ -62,4 +65,4 @@ function bookAppointment(auth, year, month, day, hour, minute) {
 
 module.exports = {
     bookAppointment
-}
+};

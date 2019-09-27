@@ -1,4 +1,5 @@
 const {google} = require('googleapis');
+const reqValidator = require('../requirement-validator.js');
 const appUtil = require('../AppUtil.js');
 
 /**
@@ -13,6 +14,7 @@ const appUtil = require('../AppUtil.js');
  */
 function getAvailTimeslots(auth, year, month, day, includeId) {
     return new Promise(function(resolve, reject) {
+        reqValidator.checkMissingInputs(year, month, day,0,0);
         const startDate = new Date(Date.UTC(year, month-1, day));
         const endDate = appUtil.getNextDay(startDate);
         const calendar = google.calendar({version: 'v3', auth});
@@ -44,4 +46,4 @@ function getAvailTimeslots(auth, year, month, day, includeId) {
 
 module.exports = {
     getAvailTimeslots
-}
+};

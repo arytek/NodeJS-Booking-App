@@ -1,4 +1,5 @@
 const {google} = require('googleapis');
+const reqValidator = require('../requirement-validator.js');
 const appUtil = require('../AppUtil.js');
 
 /**
@@ -60,6 +61,7 @@ function makeDaysArr(endDate, bookedDays) {
  */
 function getBookableDays(auth, year, month) {
     return new Promise(function(resolve, reject) {
+        reqValidator.checkMissingInputs(year, month, 0,0,0);
         const startDate = new Date(Date.UTC(year, month-1, appUtil.getCurrDateUTC()));
         const endDate = new Date((Date.UTC(year, month)));
         const calendar = google.calendar({version: 'v3', auth});
@@ -72,7 +74,8 @@ function getBookableDays(auth, year, month) {
             orderBy: 'startTime',
             q: 'appointment'
         }, (err, res) => {
-            if (err) return reject({response: 'The API returned an error: ' + err});
+            if (err) return reject({success: false,
+                message: 'The API returned an error - ' + err});
             const events = res.data.items;
             const lastDay = appUtil.getLastDayOfMonth(year, month);
             let result = {};
@@ -85,4 +88,4 @@ function getBookableDays(auth, year, month) {
 
 module.exports = {
     getBookableDays
-}
+};
