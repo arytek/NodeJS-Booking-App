@@ -41,7 +41,7 @@ function is24HoursInAdvance(year, month, day, hour, minute) {
 function isInBookableTimeframe(year, month, day, hour, minute) {
     const reqDate = new Date(Date.UTC(year, month-1, day, hour, minute));
     const reqHour = reqDate.getUTCHours();
-    if (reqHour < 9 && reqHour > 17) return false;
+    if (reqHour < 9 || reqHour > 17) return false;
     const reqDay = reqDate.getUTCDay();
     if (reqDay === 6 || reqDay === 0) return false; // 6 is Saturday, 0 is Sunday.
     return true;
