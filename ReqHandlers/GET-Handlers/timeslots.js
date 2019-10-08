@@ -1,6 +1,6 @@
 const {google} = require('googleapis');
-const reqValidator = require('../Utility/requirement-validator.js');
-const appUtil = require('../Utility/appUtil.js');
+const reqValidator = require('../../Utility/requirement-validator.js');
+const appUtil = require('../../Utility/appUtil.js');
 
 /**
  * Returns a promise with data containing objects with information of the timeslots in the given day.

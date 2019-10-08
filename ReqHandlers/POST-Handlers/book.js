@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const reqValidator = require('../Utility/requirement-validator.js');
+const reqValidator = require('../../Utility/requirement-validator.js');
 const timeslots = require('../GET-Handlers/timeslots.js');
 
 /**

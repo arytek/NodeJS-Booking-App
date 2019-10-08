@@ -1,6 +1,6 @@
 const {google} = require('googleapis');
-const reqValidator = require('../Utility/requirement-validator.js');
-const appUtil = require('../Utility/appUtil.js');
+const reqValidator = require('../../Utility/requirement-validator.js');
+const appUtil = require('../../Utility/appUtil.js');
 
 /**
  * Searches through the given events (appointments), sees which appointments span
