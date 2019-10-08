@@ -47,8 +47,8 @@ Installation and Usage
 <ol>
   <li>Visit https://developers.google.com/calendar/quickstart/nodejs to activate Google Calander on your Google Account and to generate a credentials.json file if you haven't already done so. Place your credentials.json file into the 'Utility' directory of this application.</li>
   <li>Clone this repository.</li>
-  <li>In the newly cloned repository, open your command line and run the 'npm-install' command to download the required modules.</li>
-  <li>Run the 'node.exe .' command to run the server.</li>
+  <li>In the newly cloned repository, open your command line and run the 'npm install' command to download the required modules.</li>
+  <li>Run the 'node .' command to run the server.</li>
   <li>Send the following GET request to initalise the Google Calendar with timeslots. (http://localhost:8080/initTimeslots)</li>
   <li>The booking app is now ready. Try out the following REST requests below.</li>
 </ol>
