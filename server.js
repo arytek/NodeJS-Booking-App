@@ -1,6 +1,5 @@
 const express = require('express');
 const gcal = require('./Utility/gcal.js');
-const timeslotInitialiser = require('./Utility/timeslot-initialiser.js');
 
 const days = require('./ReqHandlers/GET-Handlers/days.js');
 const timeslots = require('./ReqHandlers/GET-Handlers/timeslots.js');
