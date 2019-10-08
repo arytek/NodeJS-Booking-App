@@ -36,10 +36,10 @@ Installation and Usage
 <h2>Instructions:</h2>
 <ol> 
   <li>Clone this repository.</li>
-  <li>Run 'npm-install' in the nodejs-booking-app directory to download the required modules.</li>
-  <li>Run 'node.exe .' to run the server.</li>
+  <li>In the newly cloned repository, open your command line and run the 'npm-install' command to download the required modules.</li>
+  <li>Run the 'node.exe .' command to run the server.</li>
   <li>Send the following GET request to initalise the Google Calendar with timeslots. (http://localhost:8080/initTimeslots)</li>
-  <li>The server is ready. Try out the following REST requests below.</li>
+  <li>The booking app is now ready. Try out the following REST requests below.</li>
 </ol>
 
 <h2>REST Routes:</h2>
