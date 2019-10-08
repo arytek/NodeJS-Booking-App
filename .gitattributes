@@ -1,2 +1,2 @@
-* linguist-vendored
-*.js linguist-vendored=false
+*.html linguist-vendored
+*.css linguist-vendored
