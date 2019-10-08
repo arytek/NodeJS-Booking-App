@@ -90,10 +90,16 @@ function getAccessToken(oAuth2Client, callback) {
                 r2.question(query, (choice) => {
                     r2.close();
                     if (choice.toLocaleLowerCase() === 'y') {
-                        timeslotInitialiser.initTimeslots(oAuth2Client);
+                        timeslotInitialiser.initTimeslots(oAuth2Client)
+                        .then(function() {
+                            console.log('\n Successfully initialised Google Calendar instance with fresh ' +
+                                'timeslots. \n Server is running... Ctrl+C to end.');
+                        })
+                        .catch(function() {
+                            console.log('\n Error initialising timeslots');
+                        });
                     }
                 });
-                console.log("Server is now running... Ctrl+C to end.");
             });
             callback(oAuth2Client);
         });
