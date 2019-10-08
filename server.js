@@ -14,6 +14,7 @@ gcal.initAuthorize(setAuth);
 
 function setAuth(auth) {
     this.auth = auth;
+    console.log("Server is now running... Ctrl+C to end.");
 }
 
 /**

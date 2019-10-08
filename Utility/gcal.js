@@ -18,6 +18,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const timeslotInitialiser = require('./timeslot-initialiser.js');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
@@ -70,10 +71,7 @@ function getAccessToken(oAuth2Client, callback) {
         scope: SCOPES,
     });
     console.log('Authorize this app by visiting this url:', authUrl);
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+    const rl = readline.createInterface({input: process.stdin, output: process.stdout});
     rl.question('Enter the code from that page here: ', (code) => {
         rl.close();
         oAuth2Client.getToken(code, (err, token) => {
@@ -83,6 +81,16 @@ function getAccessToken(oAuth2Client, callback) {
             fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
                 if (err) return console.error(err);
                 console.log('Token stored to', TOKEN_PATH);
+                const query = 'Initialise Google Calendar instance with fresh timeslots? (y/n) \n' +
+                    '(Enter "y" if running this for the first time)';
+                const r2 = readline.createInterface({input: process.stdin, output: process.stdout});
+                r2.question(query, (choice) => {
+                    r2.close();
+                    if (choice.toLocaleLowerCase() === 'y') {
+                        timeslotInitialiser.initTimeslots(oAuth2Client);
+                    }
+                });
+                console.log("Server is now running... Ctrl+C to end.");
             });
             callback(oAuth2Client);
         });
@@ -91,5 +99,5 @@ function getAccessToken(oAuth2Client, callback) {
 
 module.exports = {
     SCOPES,
-    initAuthorize,
+    initAuthorize
 };
