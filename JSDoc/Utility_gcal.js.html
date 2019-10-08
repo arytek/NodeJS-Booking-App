@@ -46,6 +46,7 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+const timeslotInitialiser = require('./timeslot-initialiser.js');
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
@@ -58,10 +59,13 @@ const CREDENTIALS_PATH = './Utility/credentials.json';
 // Load client secrets from a local file.
 function initAuthorize(callback) {
     fs.readFile(CREDENTIALS_PATH, (err, content) => {
-        if (err) return console.log('The credentials.json file could not be found. \n' +
-            'Please visit: https://developers.google.com/calendar/quickstart/nodejs \n' +
-            'and generate a credentials.json file from that site. Then, place your \n' +
-            'credentials file into the "Utility" directory of this application.');
+        if (err) {
+            console.log('The credentials.json file could not be found or was invalid. \n' +
+                'Please visit: https://developers.google.com/calendar/quickstart/nodejs \n' +
+                'and generate a credentials.json file from that site. Then, place your \n' +
+                'credentials file into the "Utility" directory of this application.');
+            process.exit(1);
+        }
         // Authorize a client with credentials, then call the Google Calendar API.
         authorize(JSON.parse(content), callback);
     });
@@ -98,10 +102,7 @@ function getAccessToken(oAuth2Client, callback) {
         scope: SCOPES,
     });
     console.log('Authorize this app by visiting this url:', authUrl);
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+    const rl = readline.createInterface({input: process.stdin, output: process.stdout});
     rl.question('Enter the code from that page here: ', (code) => {
         rl.close();
         oAuth2Client.getToken(code, (err, token) => {
@@ -111,6 +112,22 @@ function getAccessToken(oAuth2Client, callback) {
             fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
                 if (err) return console.error(err);
                 console.log('Token stored to', TOKEN_PATH);
+                const query = '\nInitialise Google Calendar instance with fresh timeslots? (y/n) \n' +
+                    '(Enter "y" if running this for the first time) : ';
+                const r2 = readline.createInterface({input: process.stdin, output: process.stdout});
+                r2.question(query, (choice) => {
+                    r2.close();
+                    if (choice.toLocaleLowerCase() === 'y') {
+                        timeslotInitialiser.initTimeslots(oAuth2Client)
+                        .then(function() {
+                            console.log('\nSuccessfully initialised Google Calendar instance with fresh ' +
+                                'timeslots. \nServer is running... Ctrl+C to end');
+                        })
+                        .catch(function() {
+                            console.log('\nError initialising timeslots');
+                        });
+                    }
+                });
             });
             callback(oAuth2Client);
         });
@@ -119,7 +136,7 @@ function getAccessToken(oAuth2Client, callback) {
 
 module.exports = {
     SCOPES,
-    initAuthorize,
+    initAuthorize
 };</code></pre>
         </article>
     </section>
@@ -130,13 +147,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#handleInitTimeslots">handleInitTimeslots</a></li><li><a href="global.html#initTimeslots">initTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#logAddedEvent">logAddedEvent</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeInitialTimeslots">makeInitialTimeslots</a></li><li><a href="global.html#validateBooking">validateBooking</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#initTimeslots">initTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#logAddedEvent">logAddedEvent</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeInitialTimeslots">makeInitialTimeslots</a></li><li><a href="global.html#validateBooking">validateBooking</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Oct 09 2019 04:32:37 GMT+1100 (Australian Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Oct 09 2019 07:06:50 GMT+1100 (Australian Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
