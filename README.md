@@ -43,7 +43,7 @@ For a video demonstration of the web app, see this video: https://youtu.be/Wamlp
 
 Installation and Usage
 ----------------------
-<h2>Instructions:</h2>
+<h3>Instructions:</h3>
 <ol>
   <li>Visit https://developers.google.com/calendar/quickstart/nodejs to activate Google Calander on your Google Account and to generate a credentials.json file if you haven't already done so. Place your credentials.json file into the 'Utility' directory of this application.</li>
   <li>Clone this repository.</li>
