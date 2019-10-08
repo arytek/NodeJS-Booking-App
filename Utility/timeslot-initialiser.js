@@ -1,7 +1,7 @@
 const fs = require('fs');
 const {google} = require('googleapis');
 
-const TIMESLOTS_PATH = 'timeslots.json';
+const TIMESLOTS_PATH = './Utility/timeslots.json';
 
 /**
  * Initialises and fills the calender with timeslots. Should only be run once.
