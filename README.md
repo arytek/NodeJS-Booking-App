@@ -20,7 +20,7 @@ For a video demonstration of the web app, see this video: https://youtu.be/Wamlp
   <li><b>GET-Handlers</b> - A folder containing the GET handlers used in the app.</li>
   <li><b>POST-Handlers</b> - A folder containing the POST handlers used in the app.</li>
   <li><b>Node-Modules</b> - A folder containing the npm modules used throughout the app.</li>
-  <li><b>AppUtil.js</b> - Provides functionality used throughout the code base, such as date calculation functions.</li>
+  <li><b>appUtil.js</b> - Provides functionality used throughout the code base, such as date calculation functions.</li>
   <li><b>gcal.js</b> - Utilizes the credentials file to generate a token.json file. If a token.json file already exists, then the a oAuth2 Client is generated and returned.</li>
   <li><b>server.js</b> - The main server file that utilises express to start a web server.</li>
   <li><b>requirements-validator.js</b> - Used to validate requests sent to the server.</li>
