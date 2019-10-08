@@ -30,7 +30,10 @@ const CREDENTIALS_PATH = './Utility/credentials.json';
 // Load client secrets from a local file.
 function initAuthorize(callback) {
     fs.readFile(CREDENTIALS_PATH, (err, content) => {
-        if (err) return console.log('Error loading client secret file:', err);
+        if (err) return console.log('The credentials.json file could not be found. \n' +
+            'Please visit: https://developers.google.com/calendar/quickstart/nodejs \n' +
+            'and generate a credentials.json file from that site. Then, place your \n' +
+            'credentials file into the "Utility" directory of this application.');
         // Authorize a client with credentials, then call the Google Calendar API.
         authorize(JSON.parse(content), callback);
     });
