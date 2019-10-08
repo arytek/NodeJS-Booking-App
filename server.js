@@ -18,21 +18,6 @@ function setAuth(auth) {
 }
 
 /**
- * Handles 'initTimeslots' GET requests.
- * @param {object} req  The requests object provided by Express. See Express doc.
- * @param {object} res  The results object provided by Express. See Express doc.
- */
-function handleInitTimeslots(req, res) {
-    timeslotInitialiser.initTimeslots(this.auth)
-    .then(function(data) {
-        res.send(data);
-    })
-    .catch(function(data) {
-        res.send(data);
-    });
-}
-
-/**
  * Handles 'days' GET requests.
  * @param {object} req  The requests object provided by Express. See Express doc.
  * @param {object} res  The results object provided by Express. See Express doc.
@@ -88,7 +73,6 @@ function handleBookAppointment(req, res) {
 }
 
 // Routes.
-app.get('/initTimeslots', handleInitTimeslots);
 app.get('/days', handleGetDays);
 app.get('/timeslots', handleGetTimeslots);
 app.post('/book', handleBookAppointment);
