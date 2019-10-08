@@ -26,7 +26,7 @@ For a video demonstration of the web app, see this video: https://youtu.be/Wamlp
 <h3>Utility Directory</h3>
 <ul>
   <li><b>appUtil.js</b> - Provides functionality used throughout the code base, such as date calculation functions.</li>
-  <li><b>gcal.js</b> - Utilises the credentials file to generate a token.json file. If a token.json file already exists, then the a oAuth2 Client is generated and returned.</li>
+  <li><b>gcal.js</b> - Utilises the credentials.json file to generate a token.json file. If a token.json file already exists, then an oAuth2 Client is generated and returned.</li>
   <li><b>requirements-validator.js</b> - Used to validate requests sent to the server.</li>
   <li><b>timeslot-initialiser.js</b> - Used to initialise the Google Calendar associated with the Google account provided in credentials.json with timeslots.</li>
   <li><b>credentials.json</b> - Your credentials.json file used to authenticate the Google Calendar API used by this app.</li>
