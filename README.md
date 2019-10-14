@@ -3,7 +3,8 @@ An appointment booking server application made using Node JS. This application m
 
 The full application requirements are given below.
 
-For a video demonstration of the web app, see this video: https://youtu.be/Wamlp6TsO-E
+For a video tutorial on how to setup this application, see this video: https://youtu.be/dWip8MLvEWw
+For a video demonstration of this application, see this video: https://youtu.be/mrbTSd0JodY
 
 <h2>Requirements:</h2>
 <ul> 
