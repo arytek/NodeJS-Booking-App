@@ -42,7 +42,7 @@ function handleGetTimeslots(req, res) {
     const year = req.query.year;
     const month = req.query.month;
     const day = req.query.day;
-    timeslots.getAvailTimeslots(this.auth, year, month, day, false)
+    timeslots.getAvailTimeslots(this.auth, year, month, day)
         .then(function(data) {
             res.send(data);
         })

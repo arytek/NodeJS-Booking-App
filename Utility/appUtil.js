@@ -2,7 +2,7 @@
  * Returns the last day of the month.
  * @param {number} year  The year.
  * @param {number} month  The month.
- * @returns {Date}
+ * @returns {number}  The last day of the month.
  */
 function getLastDayOfMonth(year, month) {
     return (new Date(Date.UTC(year, month, 0))).getUTCDate();
@@ -38,9 +38,31 @@ function getNextDay(date) {
     return new Date(tomorrow); // Convert from epoch to Date.
 }
 
+/**
+ * Creates and returns a Google Calendars 'events resource'.
+ * @param {string} date  A string in the following format: 'Year-month-day'.
+ * @param {string} startTime  The start time to associate with the 'start dateTime'.
+ * @param {string} endTime  The end time to associate with the 'end dateTime'.
+ * @returns {object}  A Google Calendars 'events resource'.
+ */
+function makeEventResource(date, startTime, endTime) {
+    return {
+        'summary': 'appointment',
+        'start': {
+            'dateTime': date + startTime,
+            'timeZone': 'UTC',
+        },
+        'end': {
+            'dateTime': date + endTime,
+            'timeZone': 'UTC',
+        }
+    };
+}
+
 module.exports = {
     getLastDayOfMonth,
     getCurrDateUTC,
     getDateFromISO,
-    getNextDay
+    getNextDay,
+    makeEventResource
 };

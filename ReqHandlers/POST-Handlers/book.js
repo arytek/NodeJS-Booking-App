@@ -1,7 +1,9 @@
+const fs = require('fs');
 const {google} = require('googleapis');
 const reqValidator = require('../../Utility/requirement-validator.js');
-const timeslots = require('../GET-Handlers/timeslots.js');
+const appUtil = require('../../Utility/appUtil.js');
 
+const TIMESLOTS_PATH = './Utility/timeslots.json';
 /**
  * Searches using the provided date for a timeslot matching the hour and minute specified.
  * @param {object} timeslots  Object containing info on each timeslot for the day.
@@ -14,10 +16,12 @@ const timeslots = require('../GET-Handlers/timeslots.js');
  */
 function findMatchingTimeslot(timeslots, year, month, day, hour, minute) {
     const timeslotDate = new Date(Date.UTC(year, month-1, day, hour, minute)).toISOString();
-    return timeslots.find(function (element) {
-        const elementDate = new Date(element.startTime).toISOString(); // Ensure matching ISO format.
-        return timeslotDate === elementDate;
+    const foundTimeslot = timeslots.find(function (element) {
+        //const elementDate = new Date(element.startTime).toISOString(); // Ensure matching ISO format.
+        return element.startTime.includes(hour + ':' + minute  + ':00');
     });
+    if (!foundTimeslot) return false;
+    return {time: foundTimeslot, date: timeslotDate};
 }
 
 /**
@@ -35,31 +39,25 @@ function bookAppointment(auth, year, month, day, hour, minute) {
         const isInvalid = reqValidator.validateBooking(year, month, day, hour, minute);
         if (isInvalid) return reject(isInvalid);
 
-        timeslots.getAvailTimeslots(auth, year, month, day, true)
-            .then(function(data) {
-                const timeslots = data.timeslots;
-                const timeslot = findMatchingTimeslot(timeslots, year, month, day, hour, minute);
-                if (!timeslot) return resolve({success: false, message: 'Invalid time slot'});
+        const timeslots = (JSON.parse(fs.readFileSync(TIMESLOTS_PATH))).timeslots;
+        const timeslot = findMatchingTimeslot(timeslots, year, month, day, hour, minute);
+        if (!timeslot) return resolve({success: false, message: 'Invalid time slot'});
+        const date = year + '-' + month + '-' + day;
+        const event = appUtil.makeEventResource(date, timeslot.time.startTime, timeslot.time.endTime);
 
-                const calendar = google.calendar({version: 'v3', auth});
-                calendar.events.patch({
-                    auth: auth,
-                    calendarId: 'primary',
-                    eventId: timeslot.id,
-                    resource: {'summary': 'appointment'},
-                }, function (err, res) {
-                    if (err) return console.log('Error contacting the Calendar service: ' + err);
-                    const event = res.data;
-                    console.log('A timeslot has been changed to an appointment: ', event.id);
-                    const result = {startTime: event.start.dateTime, endTime: event.end.dateTime};
-                    const response = Object.assign({success: true}, result);
-                    resolve(response);
-                });
-
-            })
-            .catch(function(data) {
-                return reject({success: false, message: 'Invalid time slot'});
-            })
+        const calendar = google.calendar({version: 'v3', auth});
+        calendar.events.insert({
+            auth: auth,
+            calendarId: 'primary',
+            resource: event
+        }, function (err, res) {
+            if (err) return console.log('Error contacting the Calendar service: ' + err);
+            const event = res.data;
+            console.log('Appointment created: ', event.id);
+            const result = {startTime: event.start.dateTime, endTime: event.end.dateTime};
+            const response = Object.assign({success: true}, result);
+            resolve(response);
+        });
     });
 }
 

@@ -36,8 +36,8 @@ function getBookedDays(events) {
  * info on whether the day has any timeslots available or not.
  * @param {number} endDate  End date of the month.
  * @param {number[]} bookedDays  An array containing the days that are fully booked.
- * @returns {object[]} daysArr  An array containing objects which represent
- * days of the month, and whether the day has any timeslots available.
+ * @returns {object[]} daysArr  An array containing objects which represent the days of
+ * the month, and whether the day has any timeslots available.
  */
 function makeDaysArr(endDate, bookedDays) {
     let daysArr = [];
@@ -61,7 +61,7 @@ function makeDaysArr(endDate, bookedDays) {
  */
 function getBookableDays(auth, year, month) {
     return new Promise(function(resolve, reject) {
-        const isInvalid = reqValidator.checkMissingInputs(year, month, '0','0','0');
+        const isInvalid = reqValidator.validateGetDays(year, month);
         if (isInvalid) return reject(isInvalid);
 
         const startDate = new Date(Date.UTC(year, month-1, appUtil.getCurrDateUTC()));
