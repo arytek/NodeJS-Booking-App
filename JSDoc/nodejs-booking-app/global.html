@@ -293,7 +293,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_gcal.js.html">Utility/gcal.js</a>, <a href="Utility_gcal.js.html#line52">line 52</a>
+        <a href="Utility_gcal.js.html">Utility/gcal.js</a>, <a href="Utility_gcal.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -545,7 +545,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ReqHandlers_POST-Handlers_book.js.html">ReqHandlers/POST-Handlers/book.js</a>, <a href="ReqHandlers_POST-Handlers_book.js.html#line33">line 33</a>
+        <a href="ReqHandlers_POST-Handlers_book.js.html">ReqHandlers/POST-Handlers/book.js</a>, <a href="ReqHandlers_POST-Handlers_book.js.html#line37">line 37</a>
     </li></ul></dd>
     
 
@@ -796,7 +796,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line59">line 59</a>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line73">line 73</a>
     </li></ul></dd>
     
 
@@ -1070,7 +1070,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ReqHandlers_POST-Handlers_book.js.html">ReqHandlers/POST-Handlers/book.js</a>, <a href="ReqHandlers_POST-Handlers_book.js.html#line15">line 15</a>
+        <a href="ReqHandlers_POST-Handlers_book.js.html">ReqHandlers/POST-Handlers/book.js</a>, <a href="ReqHandlers_POST-Handlers_book.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -1252,7 +1252,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_gcal.js.html">Utility/gcal.js</a>, <a href="Utility_gcal.js.html#line71">line 71</a>
+        <a href="Utility_gcal.js.html">Utility/gcal.js</a>, <a href="Utility_gcal.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -1288,7 +1288,7 @@
     
 
     
-    <h4 class="name" id="getAvailTimeslots"><span class="type-signature"></span>getAvailTimeslots<span class="signature">(auth, year, month, day, includeId)</span><span class="type-signature"> &rarr; {promise}</span></h4>
+    <h4 class="name" id="getAvailTimeslots"><span class="type-signature"></span>getAvailTimeslots<span class="signature">(auth, year, month, day)</span><span class="type-signature"> &rarr; {promise}</span></h4>
     
 
     
@@ -1421,29 +1421,6 @@
         </tr>
 
     
-
-        <tr>
-            
-                <td class="name"><code>includeId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">boolean</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Whether the returned object should include event ids.</td>
-        </tr>
-
-    
     </tbody>
 </table>
 
@@ -1481,7 +1458,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ReqHandlers_GET-Handlers_timeslots.js.html">ReqHandlers/GET-Handlers/timeslots.js</a>, <a href="ReqHandlers_GET-Handlers_timeslots.js.html#line15">line 15</a>
+        <a href="ReqHandlers_GET-Handlers_timeslots.js.html">ReqHandlers/GET-Handlers/timeslots.js</a>, <a href="ReqHandlers_GET-Handlers_timeslots.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -2164,7 +2141,7 @@
     
 
     
-    <h4 class="name" id="getLastDayOfMonth"><span class="type-signature"></span>getLastDayOfMonth<span class="signature">(year, month)</span><span class="type-signature"> &rarr; {Date}</span></h4>
+    <h4 class="name" id="getLastDayOfMonth"><span class="type-signature"></span>getLastDayOfMonth<span class="signature">(year, month)</span><span class="type-signature"> &rarr; {number}</span></h4>
     
 
     
@@ -2316,6 +2293,10 @@
 <h5>Returns:</h5>
 
         
+<div class="param-desc">
+    The last day of the month.
+</div>
+
 
 
 <dl>
@@ -2324,7 +2305,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Date</span>
+<span class="param-type">number</span>
 
 
     </dd>
@@ -2497,6 +2478,165 @@
     
 
     
+    <h4 class="name" id="getResult"><span class="type-signature"></span>getResult<span class="signature">(appointments)</span><span class="type-signature"> &rarr; {Array.&lt;object>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Returns an array with timeslots; excluding the timeslots that are booked (appointments).
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>appointments</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An Object containing info on the appointments booked in the day.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ReqHandlers_GET-Handlers_timeslots.js.html">ReqHandlers/GET-Handlers/timeslots.js</a>, <a href="ReqHandlers_GET-Handlers_timeslots.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    resultsArr  An array containing all the available timeslots in the day.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;object></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
     <h4 class="name" id="handleBookAppointment"><span class="type-signature"></span>handleBookAppointment<span class="signature">(req, res)</span><span class="type-signature"></span></h4>
     
 
@@ -2621,7 +2761,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line60">line 60</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -2781,7 +2921,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line25">line 25</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line24">line 24</a>
     </li></ul></dd>
     
 
@@ -2941,7 +3081,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="server.js.html">server.js</a>, <a href="server.js.html#line42">line 42</a>
+        <a href="server.js.html">server.js</a>, <a href="server.js.html#line41">line 41</a>
     </li></ul></dd>
     
 
@@ -2966,165 +3106,6 @@
 
 
 
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="initTimeslots"><span class="type-signature"></span>initTimeslots<span class="signature">(auth)</span><span class="type-signature"> &rarr; {promise}</span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Initialises and fills the calender with timeslots. Should only be run once.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>auth</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The oAuth2Client used for authentication for the Google Calendar API.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_timeslot-initialiser.js.html">Utility/timeslot-initialiser.js</a>, <a href="Utility_timeslot-initialiser.js.html#line11">line 11</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<h5>Returns:</h5>
-
-        
-<div class="param-desc">
-    A promise representing the eventual completion of the initTimeslots() function.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">promise</span>
-
-
-    </dd>
-</dl>
-
-    
 
 
 
@@ -3329,7 +3310,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line25">line 25</a>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line33">line 33</a>
     </li></ul></dd>
     
 
@@ -3580,7 +3561,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line41">line 41</a>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line49">line 49</a>
     </li></ul></dd>
     
 
@@ -3889,143 +3870,6 @@
     
 
     
-    <h4 class="name" id="logAddedEvent"><span class="type-signature"></span>logAddedEvent<span class="signature">(res)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Logs the newly created event to the server console.
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>res</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">object</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">An object representing an event.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_timeslot-initialiser.js.html">Utility/timeslot-initialiser.js</a>, <a href="Utility_timeslot-initialiser.js.html#line65">line 65</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
     <h4 class="name" id="makeDaysArr"><span class="type-signature"></span>makeDaysArr<span class="signature">(endDate, bookedDays)</span><span class="type-signature"> &rarr; {Array.&lt;object>}</span></h4>
     
 
@@ -4179,7 +4023,7 @@
 
         
 <div class="param-desc">
-    daysArr  An array containing objects which representdays of the month, and whether the day has any timeslots available.
+    daysArr  An array containing objects which represent the days ofthe month, and whether the day has any timeslots available.
 </div>
 
 
@@ -4208,7 +4052,7 @@
     
 
     
-    <h4 class="name" id="makeInitialTimeslots"><span class="type-signature"></span>makeInitialTimeslots<span class="signature">(startTime, endTime)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    <h4 class="name" id="makeEventResource"><span class="type-signature"></span>makeEventResource<span class="signature">(date, startTime, endTime)</span><span class="type-signature"> &rarr; {object}</span></h4>
     
 
     
@@ -4252,13 +4096,36 @@
 
         <tr>
             
+                <td class="name"><code>date</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A string in the following format: 'Year-month-day'.</td>
+        </tr>
+
+    
+
+        <tr>
+            
                 <td class="name"><code>startTime</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -4281,7 +4148,7 @@
             <td class="type">
             
                 
-<span class="param-type">number</span>
+<span class="param-type">string</span>
 
 
             
@@ -4332,7 +4199,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_timeslot-initialiser.js.html">Utility/timeslot-initialiser.js</a>, <a href="Utility_timeslot-initialiser.js.html#line44">line 44</a>
+        <a href="Utility_appUtil.js.html">Utility/appUtil.js</a>, <a href="Utility_appUtil.js.html#line48">line 48</a>
     </li></ul></dd>
     
 
@@ -4398,7 +4265,7 @@
 
 
 <div class="description">
-    Used to valid bookings.
+    Used to validate bookings.
 </div>
 
 
@@ -4450,7 +4317,7 @@
 
             
 
-            <td class="description last">Year of booking.</td>
+            <td class="description last">Year of booking to check.</td>
         </tr>
 
     
@@ -4473,7 +4340,7 @@
 
             
 
-            <td class="description last">Month of booking.</td>
+            <td class="description last">Month of booking to check.</td>
         </tr>
 
     
@@ -4496,7 +4363,7 @@
 
             
 
-            <td class="description last">Day of booking.</td>
+            <td class="description last">Day of booking to check.</td>
         </tr>
 
     
@@ -4519,7 +4386,7 @@
 
             
 
-            <td class="description last">Hour of booking.</td>
+            <td class="description last">Hour of booking to check.</td>
         </tr>
 
     
@@ -4542,7 +4409,7 @@
 
             
 
-            <td class="description last">Minute of booking.</td>
+            <td class="description last">Minute of booking to check.</td>
         </tr>
 
     
@@ -4583,7 +4450,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line76">line 76</a>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line90">line 90</a>
     </li></ul></dd>
     
 
@@ -4636,6 +4503,393 @@
 
 
         
+            
+
+    
+
+    
+    <h4 class="name" id="validateGetDays"><span class="type-signature"></span>validateGetDays<span class="signature">(year, month)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Used to validate GET Days requests.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Year parameter to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>month</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Month parameter to check.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line123">line 123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns an object with info on why the request was invalid.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="validateGetTimeslots"><span class="type-signature"></span>validateGetTimeslots<span class="signature">(year, month, day)</span><span class="type-signature"> &rarr; {object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Used to validate GET Timeslot requests.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>year</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Year parameter to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>month</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Month parameter to check.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>day</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Day parameter to check.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Utility_requirement-validator.js.html">Utility/requirement-validator.js</a>, <a href="Utility_requirement-validator.js.html#line108">line 108</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    Returns an object with info on why the request was invalid.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
     
 
     
@@ -4651,13 +4905,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#initTimeslots">initTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#logAddedEvent">logAddedEvent</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeInitialTimeslots">makeInitialTimeslots</a></li><li><a href="global.html#validateBooking">validateBooking</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#getResult">getResult</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeEventResource">makeEventResource</a></li><li><a href="global.html#validateBooking">validateBooking</a></li><li><a href="global.html#validateGetDays">validateGetDays</a></li><li><a href="global.html#validateGetTimeslots">validateGetTimeslots</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Oct 09 2019 07:06:50 GMT+1100 (Australian Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon Oct 14 2019 11:37:45 GMT+1100 (Australian Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

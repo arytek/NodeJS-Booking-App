@@ -37,8 +37,16 @@
  */
 function isInPast(year, month, day, hour, minute) {
     const todayDate = Date.now();
-    const reqDate = Date.UTC(year, month-1, day, hour, minute);
+    let reqDate = {};
+    if (hour !== undefined) {
+        reqDate = Date.UTC(year, month - 1, day, hour, minute);
+    } else if (day !== undefined) {
+        reqDate = Date.UTC(year, month - 1, day);
+    } else {
+        reqDate = Date.UTC(year, month);
+    }
     return reqDate &lt; todayDate;
+
 }
 
 /**
@@ -67,11 +75,17 @@ function is24HoursInAdvance(year, month, day, hour, minute) {
  * @returns {boolean}  Returns a boolean representing whether the booking is in the bookable time frame.
  */
 function isInBookableTimeframe(year, month, day, hour, minute) {
-    const reqDate = new Date(Date.UTC(year, month-1, day, hour, minute));
-    const reqHour = reqDate.getUTCHours();
-    if (reqHour &lt; 9 || reqHour > 17) return false;
-    const reqDay = reqDate.getUTCDay();
-    if (reqDay === 6 || reqDay === 0) return false; // 6 is Saturday, 0 is Sunday.
+    if (hour !== undefined) {
+        const reqDate = new Date(Date.UTC(year, month-1, day, hour, minute));
+        const reqDay = reqDate.getUTCDay();
+        if (reqDay === 6 || reqDay === 0) return false; // 6 is Saturday, 0 is Sunday.
+        const reqHour = reqDate.getUTCHours();
+        if (reqHour &lt; 9 || reqHour > 17) return false;
+    } else {
+        const reqDate = new Date(Date.UTC(year, month-1, day));
+        const reqDay = reqDate.getUTCDay();
+        if (reqDay === 6 || reqDay === 0) return false; // 6 is Saturday, 0 is Sunday.
+    }
     return true;
 }
 
@@ -93,12 +107,12 @@ function checkMissingInputs(year, month, day, hour, minute) {
 }
 
 /**
- * Used to valid bookings.
- * @param {number} year  Year of booking.
- * @param {number} month  Month of booking.
- * @param {number} day  Day of booking.
- * @param {number} hour  Hour of booking.
- * @param {number} minute  Minute of booking.
+ * Used to validate bookings.
+ * @param {number} year  Year of booking to check.
+ * @param {number} month  Month of booking to check.
+ * @param {number} day  Day of booking to check.
+ * @param {number} hour  Hour of booking to check.
+ * @param {number} minute  Minute of booking to check.
  * @returns {object}  Returns an object with info on why the booking was invalid.
  */
 function validateBooking(year, month, day, hour, minute) {
@@ -112,9 +126,40 @@ function validateBooking(year, month, day, hour, minute) {
         return {success: false, message: 'Cannot book with less than 24 hours in advance'};
 }
 
+/**
+ * Used to validate GET Timeslot requests.
+ * @param {number} year  Year parameter to check.
+ * @param {number} month  Month parameter to check.
+ * @param {number} day  Day parameter to check.
+ * @returns {object}  Returns an object with info on why the request was invalid.
+ */
+function validateGetTimeslots(year, month, day) {
+    const missingInputs = checkMissingInputs(year, month, day, '0', '0');
+    if (missingInputs) return missingInputs;
+    if (isInPast(year, month, day, undefined, undefined))
+        return {success: false, message: 'No timeslots are available in the past'};
+    if (!isInBookableTimeframe(year, month, day, undefined, undefined))
+        return {success: false, message: 'No timeslots exist outside bookable timeframe'};
+}
+
+/**
+ * Used to validate GET Days requests.
+ * @param {number} year  Year parameter to check.
+ * @param {number} month  Month parameter to check.
+ * @returns {object}  Returns an object with info on why the request was invalid.
+ */
+function validateGetDays(year, month) {
+    const missingInputs = checkMissingInputs(year, month, '0', '0', '0');
+    if (missingInputs) return missingInputs;
+    if (isInPast(year, month, undefined, undefined, undefined))
+        return {success: false, message: 'No timeslots are available in the past'};
+}
+
 module.exports = {
     checkMissingInputs,
-    validateBooking
+    validateBooking,
+    validateGetTimeslots,
+    validateGetDays
 };</code></pre>
         </article>
     </section>
@@ -125,13 +170,13 @@ module.exports = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#initTimeslots">initTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#logAddedEvent">logAddedEvent</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeInitialTimeslots">makeInitialTimeslots</a></li><li><a href="global.html#validateBooking">validateBooking</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#authorize">authorize</a></li><li><a href="global.html#bookAppointment">bookAppointment</a></li><li><a href="global.html#checkMissingInputs">checkMissingInputs</a></li><li><a href="global.html#findMatchingTimeslot">findMatchingTimeslot</a></li><li><a href="global.html#fs">fs</a></li><li><a href="global.html#getAccessToken">getAccessToken</a></li><li><a href="global.html#getAvailTimeslots">getAvailTimeslots</a></li><li><a href="global.html#getBookableDays">getBookableDays</a></li><li><a href="global.html#getBookedDays">getBookedDays</a></li><li><a href="global.html#getCurrDateUTC">getCurrDateUTC</a></li><li><a href="global.html#getDateFromISO">getDateFromISO</a></li><li><a href="global.html#getLastDayOfMonth">getLastDayOfMonth</a></li><li><a href="global.html#getNextDay">getNextDay</a></li><li><a href="global.html#getResult">getResult</a></li><li><a href="global.html#handleBookAppointment">handleBookAppointment</a></li><li><a href="global.html#handleGetDays">handleGetDays</a></li><li><a href="global.html#handleGetTimeslots">handleGetTimeslots</a></li><li><a href="global.html#is24HoursInAdvance">is24HoursInAdvance</a></li><li><a href="global.html#isInBookableTimeframe">isInBookableTimeframe</a></li><li><a href="global.html#isInPast">isInPast</a></li><li><a href="global.html#makeDaysArr">makeDaysArr</a></li><li><a href="global.html#makeEventResource">makeEventResource</a></li><li><a href="global.html#validateBooking">validateBooking</a></li><li><a href="global.html#validateGetDays">validateGetDays</a></li><li><a href="global.html#validateGetTimeslots">validateGetTimeslots</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Wed Oct 09 2019 07:06:50 GMT+1100 (Australian Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Mon Oct 14 2019 11:37:45 GMT+1100 (Australian Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
