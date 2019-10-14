@@ -56,7 +56,7 @@ function bookAppointment(auth, year, month, day, hour, minute) {
             console.log('Appointment created: ', event.id);
             const result = {startTime: event.start.dateTime, endTime: event.end.dateTime};
             const response = Object.assign({success: true}, result);
-            resolve(response);
+            return resolve(response);
         });
     });
 }
