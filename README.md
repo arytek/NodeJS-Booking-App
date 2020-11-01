@@ -52,7 +52,7 @@ Installation and Usage
   <li>The booking app is now ready. Try out the following REST requests below.</li>
 </ol>
 
-<h2>REST Routes:</h2>
+<h2>HTTP REST Routes:</h2>
 
     GET  /days?year=yyyy&month=mm
     
