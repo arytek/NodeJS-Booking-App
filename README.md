@@ -1,5 +1,5 @@
 # NodeJS Booking App
-An appointment booking server application made using Node JS. This application makes use of the Google Calendar API to create appointment timeslots on Google Calender. The appointment timeslots are 40 minutes in length, and a 5 minute break between each timeslot exists. The timeslots are defined from Monday to Friday, 9AM to 6PM. This application meets all of the requirements listed below. The requirements defined in this booking server are easily customisable. For example, if you would like to define your own timeslots, simply edit the timeslots in timeslots.json.
+An appointment booking server application made using Node JS. This application makes use of the Google Calendar API to create appointment timeslots on Google Calender. The appointment timeslots are 40 minutes in length, and a 5 minute break between each timeslot exists. The timeslots are defined from Monday to Friday, 9AM to 6PM. This application meets all of the requirements listed below. The requirements defined in this booking server are easily customizable. For example, if you would like to define your own timeslots, simply edit the timeslots within timeslots.json.
 
 For a video tutorial on how to setup this application, see this video: https://youtu.be/dWip8MLvEWw <br>
 For a video demonstration of this application, see this video: https://youtu.be/IS-V0Xmv1mw
