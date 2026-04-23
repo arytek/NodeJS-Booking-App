@@ -1,61 +1,60 @@
 /**
- * Returns the last day of the month.
- * @param {number} year  The year.
- * @param {number} month  The month.
- * @returns {number}  The last day of the month.
+ * Returns the last day of the given month (1-indexed).
  */
 function getLastDayOfMonth(year, month) {
-    return (new Date(Date.UTC(year, month, 0))).getUTCDate();
+    return new Date(Date.UTC(year, month, 0)).getUTCDate();
 }
 
 /**
- * Returns the current date in the UTC timezone.
- * @returns {number}
+ * Returns the current UTC day-of-month.
  */
 function getCurrDateUTC() {
-    const currDate = new Date();
-    return currDate.getUTCDate();
+    return new Date().getUTCDate();
 }
 
 /**
- * Returns the date from a given ISOString.
- * @param {string} dateISOString  The callback for the authorized client.
- * @returns {number}
+ * Returns the UTC day-of-month from an ISO date string.
  */
 function getDateFromISO(dateISOString) {
-    const date = new Date(dateISOString);
-    return date.getUTCDate();
+    return new Date(dateISOString).getUTCDate();
 }
 
 /**
- * Returns the next date (i.e the day after).
- * @param {Date} date  The date to get the next day of.
- * @returns {Date}
+ * Returns a new Date one day after the given date.
  */
 function getNextDay(date) {
-    let tomorrow = new Date(date);
-    tomorrow.setDate(date.getUTCDate() + 1); // Returns epoch value.
-    return new Date(tomorrow); // Convert from epoch to Date.
+    const next = new Date(date);
+    next.setUTCDate(date.getUTCDate() + 1);
+    return next;
 }
 
 /**
- * Creates and returns a Google Calendars 'events resource'.
- * @param {string} date  A string in the following format: 'Year-month-day'.
- * @param {string} startTime  The start time to associate with the 'start dateTime'.
- * @param {string} endTime  The end time to associate with the 'end dateTime'.
- * @returns {object}  A Google Calendars 'events resource'.
+ * Extracts "HH:mm" from an event dateTime string (any ISO format) using UTC.
+ */
+function extractHourMinuteFromEvent(dateTime) {
+    const d = new Date(dateTime);
+    if (Number.isNaN(d.getTime())) return null;
+    const hh = String(d.getUTCHours()).padStart(2, '0');
+    const mm = String(d.getUTCMinutes()).padStart(2, '0');
+    return `${hh}:${mm}`;
+}
+
+/**
+ * Extracts "HH:mm" from a timeslot time string like "T09:00:00Z".
+ */
+function extractHourMinuteFromSlot(slotTime) {
+    const match = /T(\d{2}):(\d{2})/.exec(slotTime);
+    return match ? `${match[1]}:${match[2]}` : null;
+}
+
+/**
+ * Creates a Google Calendar 'events resource' for an appointment.
  */
 function makeEventResource(date, startTime, endTime) {
     return {
-        'summary': 'appointment',
-        'start': {
-            'dateTime': date + startTime,
-            'timeZone': 'UTC',
-        },
-        'end': {
-            'dateTime': date + endTime,
-            'timeZone': 'UTC',
-        }
+        summary: 'appointment',
+        start: {dateTime: date + startTime, timeZone: 'UTC'},
+        end: {dateTime: date + endTime, timeZone: 'UTC'},
     };
 }
 
@@ -64,5 +63,7 @@ module.exports = {
     getCurrDateUTC,
     getDateFromISO,
     getNextDay,
-    makeEventResource
+    extractHourMinuteFromEvent,
+    extractHourMinuteFromSlot,
+    makeEventResource,
 };

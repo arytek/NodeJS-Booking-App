@@ -1,80 +1,60 @@
+require('dotenv').config();
+
 const express = require('express');
 const gcal = require('./Utility/gcal.js');
-
 const days = require('./ReqHandlers/GET-Handlers/days.js');
 const timeslots = require('./ReqHandlers/GET-Handlers/timeslots.js');
 const book = require('./ReqHandlers/POST-Handlers/book.js');
 
-const app = express();
-const auth = {};
+const PORT = Number(process.env.PORT) || 8080;
 
-// Get the OAuth2 client for making Google Calendar API requests.
-gcal.initAuthorize(setAuth);
-
-function setAuth(auth) {
-    this.auth = auth;
-    console.log('\nServer is now running... Ctrl+C to end');
+function sendResult(res, data) {
+    const status = data && data.success === false ? 400 : 200;
+    res.status(status).json(data);
 }
 
-/**
- * Handles 'days' GET requests.
- * @param {object} req  The requests object provided by Express. See Express doc.
- * @param {object} res  The results object provided by Express. See Express doc.
- */
-function handleGetDays(req, res) {
-    const year = req.query.year;
-    const month = req.query.month;
-    days.getBookableDays(this.auth, year, month)
-    .then(function(data) {
-        res.send(data);
-    })
-    .catch(function(data) {
-        res.send(data);
+function wrap(handler) {
+    return (req, res, next) => Promise.resolve(handler(req, res)).catch(next);
+}
+
+async function main() {
+    const auth = await gcal.initAuthorize();
+
+    const app = express();
+    app.use(express.json());
+
+    app.get('/days', wrap(async (req, res) => {
+        const data = await days.getBookableDays(auth, req.query.year, req.query.month);
+        sendResult(res, data);
+    }));
+
+    app.get('/timeslots', wrap(async (req, res) => {
+        const data = await timeslots.getAvailTimeslots(
+            auth, req.query.year, req.query.month, req.query.day
+        );
+        sendResult(res, data);
+    }));
+
+    app.post('/book', wrap(async (req, res) => {
+        const data = await book.bookAppointment(
+            auth,
+            req.query.year, req.query.month, req.query.day,
+            req.query.hour, req.query.minute
+        );
+        sendResult(res, data);
+    }));
+
+    app.use((err, _req, res, _next) => {
+        console.error(err);
+        res.status(500).json({success: false, message: err.message || 'Internal server error'});
+    });
+
+    app.listen(PORT, () => {
+        console.log(`Server is now running on port ${PORT}... Ctrl+C to end`);
     });
 }
 
-/**
- * Handles 'timeslots' GET requests.
- * @param {object} req  The requests object provided by Express. See Express doc.
- * @param {object} res  The results object provided by Express. See Express doc.
- */
-function handleGetTimeslots(req, res) {
-    const year = req.query.year;
-    const month = req.query.month;
-    const day = req.query.day;
-    timeslots.getAvailTimeslots(this.auth, year, month, day)
-        .then(function(data) {
-            res.send(data);
-        })
-        .catch(function(data) {
-            res.send(data);
-        });
-}
-
-/**
- * Handles 'book' POST requests.
- * @param {object} req  The requests object provided by Express. See Express doc.
- * @param {object} res  The results object provided by Express. See Express doc.
- */
-function handleBookAppointment(req, res) {
-    const year = req.query.year;
-    const month = req.query.month;
-    const day = req.query.day;
-    const hour = req.query.hour;
-    const minute = req.query.minute;
-    book.bookAppointment(this.auth, year, month, day, hour, minute)
-        .then(function(data) {
-            res.send(data);
-        })
-        .catch(function(data) {
-            res.send(data);
-        });
-}
-
-// Routes.
-app.get('/days', handleGetDays);
-app.get('/timeslots', handleGetTimeslots);
-app.post('/book', handleBookAppointment);
-
-// Listen on port 8080 for incoming requests to the server.
-const server = app.listen(8080, function() {});
+main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+});

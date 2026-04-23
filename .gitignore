@@ -2,3 +2,7 @@
 /node_modules/
 /Utility/credentials.json
 /Utility/token.json
+.env
+.env.local
+.
+.DS_Store

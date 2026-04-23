@@ -1,95 +1,118 @@
-/**
- * @license
- * Copyright Google Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-const fs = require('fs');
-const readline = require('readline');
+const fs = require('fs/promises');
+const http = require('http');
+const path = require('path');
+const {exec} = require('child_process');
 const {google} = require('googleapis');
 
-// If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar'];
-// The file token.json stores the user's access and refresh tokens, and is
-// created automatically when the authorization flow completes for the first
-// time.
-const TOKEN_PATH = './Utility/token.json';
-const CREDENTIALS_PATH = './Utility/credentials.json';
+const TOKEN_PATH = path.join(__dirname, 'token.json');
+const CREDENTIALS_PATH = path.join(__dirname, 'credentials.json');
 
-// Load client secrets from a local file.
-function initAuthorize(callback) {
-    fs.readFile(CREDENTIALS_PATH, (err, content) => {
-        if (err) {
-            console.log('The credentials.json file could not be found or was invalid. \n' +
-                'Please visit: https://developers.google.com/calendar/quickstart/nodejs \n' +
-                'and generate a credentials.json file from that site. Then, place your \n' +
-                'credentials file into the "Utility" directory of this application.');
-            process.exit(1);
-        }
-        // Authorize a client with credentials, then call the Google Calendar API.
-        authorize(JSON.parse(content), callback);
+async function readJson(filePath) {
+    const content = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(content);
+}
+
+function openBrowser(url) {
+    const cmd = process.platform === 'darwin' ? 'open'
+        : process.platform === 'win32' ? 'start ""'
+        : 'xdg-open';
+    exec(`${cmd} "${url}"`, () => {});
+}
+
+const SUCCESS_HTML = `<!doctype html><html><head><meta charset="utf-8"><title>Authorization complete</title>
+<style>body{font-family:system-ui;background:#111;color:#eee;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}
+.card{text-align:center;padding:2rem}h1{margin:0 0 .5rem}</style></head>
+<body><div class="card"><h1>Authorization complete</h1><p>You can close this tab.</p></div></body></html>`;
+
+function captureAuthCode(port) {
+    return new Promise((resolve, reject) => {
+        const server = http.createServer((req, res) => {
+            const url = new URL(req.url, `http://127.0.0.1:${port}`);
+            const code = url.searchParams.get('code');
+            const error = url.searchParams.get('error');
+            if (error) {
+                res.writeHead(400, {'Content-Type': 'text/plain'});
+                res.end(`Authorization failed: ${error}`);
+                server.close();
+                reject(new Error(`OAuth error: ${error}`));
+                return;
+            }
+            if (!code) {
+                res.writeHead(400, {'Content-Type': 'text/plain'});
+                res.end('Missing authorization code');
+                return;
+            }
+            res.writeHead(200, {'Content-Type': 'text/html; charset=utf-8'});
+            res.end(SUCCESS_HTML);
+            server.close();
+            resolve(code);
+        });
+        server.on('error', reject);
+        server.listen(port, '127.0.0.1');
     });
 }
 
-/**
- * Create an OAuth2 client with the given credentials, and then execute the
- * given callback function.
- * @param {Object} credentials The authorization client credentials.
- * @param {function} callback The callback to call with the authorized client.
- */
-function authorize(credentials, callback) {
-    const {client_secret, client_id, redirect_uris} = credentials.installed;
-    const oAuth2Client = new google.auth.OAuth2(
-        client_id, client_secret, redirect_uris[0]);
-
-    // Check if we have previously stored a token.
-    fs.readFile(TOKEN_PATH, (err, token) => {
-        if (err) return getAccessToken(oAuth2Client, callback);
-        oAuth2Client.setCredentials(JSON.parse(token));
-        callback(oAuth2Client);
+async function runLoopbackFlow(clientId, clientSecret) {
+    const server = http.createServer();
+    await new Promise((resolve, reject) => {
+        server.once('error', reject);
+        server.listen(0, '127.0.0.1', resolve);
     });
-}
+    const {port} = server.address();
+    server.close();
 
-/**
- * Get and store new token after prompting for user authorization, and then
- * execute the given callback with the authorized OAuth2 client.
- * @param {google.auth.OAuth2} oAuth2Client The OAuth2 client to get token for.
- * @param {function} callback The callback for the authorized client.
- */
-function getAccessToken(oAuth2Client, callback) {
+    const redirectUri = `http://127.0.0.1:${port}`;
+    const oAuth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
     const authUrl = oAuth2Client.generateAuthUrl({
         access_type: 'offline',
         scope: SCOPES,
+        prompt: 'consent',
     });
-    console.log('Authorize this app by visiting this url:', authUrl);
-    const rl = readline.createInterface({input: process.stdin, output: process.stdout});
-    rl.question('Enter the code from that page here: ', (code) => {
-        rl.close();
-        oAuth2Client.getToken(code, (err, token) => {
-            if (err) return console.error('Error retrieving access token', err);
-            oAuth2Client.setCredentials(token);
-            // Store the token to disk for later program executions
-            fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-                if (err) return console.error(err);
-                console.log('Token stored to', TOKEN_PATH);
-            });
-            callback(oAuth2Client);
-        });
-    });
+
+    console.log('\nOpening browser for authorization. If it does not open, visit:');
+    console.log(authUrl + '\n');
+    openBrowser(authUrl);
+
+    const code = await captureAuthCode(port);
+    const {tokens} = await oAuth2Client.getToken(code);
+    oAuth2Client.setCredentials(tokens);
+    await fs.writeFile(TOKEN_PATH, JSON.stringify(tokens));
+    console.log('Token stored to', TOKEN_PATH);
+    return oAuth2Client;
+}
+
+async function initAuthorize() {
+    let credentials;
+    try {
+        credentials = await readJson(CREDENTIALS_PATH);
+    } catch (err) {
+        console.error(
+            'The credentials.json file could not be found or was invalid.\n' +
+            'Please visit: https://developers.google.com/calendar/quickstart/nodejs\n' +
+            'and generate a credentials.json file from that site. Then, place your\n' +
+            'credentials file into the "Utility" directory of this application.'
+        );
+        throw err;
+    }
+
+    const clientConfig = credentials.installed || credentials.web;
+    if (!clientConfig) {
+        throw new Error('credentials.json must contain an "installed" or "web" OAuth client configuration');
+    }
+    const {client_secret, client_id} = clientConfig;
+
+    try {
+        const token = await readJson(TOKEN_PATH);
+        const oAuth2Client = new google.auth.OAuth2(client_id, client_secret);
+        oAuth2Client.setCredentials(token);
+        return oAuth2Client;
+    } catch {
+        return runLoopbackFlow(client_id, client_secret);
+    }
 }
 
 module.exports = {
     SCOPES,
-    initAuthorize
+    initAuthorize,
 };

@@ -1,16 +1,21 @@
 {
   "name": "nodejs-booking-app",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "An appointment booking web app written using JavaScript and powered by Node JS.",
   "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
+    "start": "node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "Aryan Nateq",
   "license": "GPL-3.0",
   "dependencies": {
-    "express": "^4.17.1",
-    "googleapis": "^39.2.0"
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "googleapis": "^171.4.0"
   }
 }
